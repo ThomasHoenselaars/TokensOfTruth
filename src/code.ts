@@ -22,7 +22,7 @@ figma.ui.onmessage = async (msg: MessageEvent) => {
   }
 
   // Make sure to close the plugin when you're done.
-  figma.closePlugin();
+  // figma.closePlugin();
 };
 
 
