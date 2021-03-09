@@ -1,0 +1,18 @@
+{
+  "name": "TokensOfTruth",
+  "version": "1.0.0",
+  "description": "Your Figma plugin",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "tsc -p tsconfig.json --watch"
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@figma/plugin-typings": "^1.19.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}

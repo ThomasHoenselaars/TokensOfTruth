@@ -1,0 +1,38 @@
+<div class="app-wrapper">
+  <h2>TokensOfTruth</h2>
+  <div>
+    <strong>Theme JSON</strong>
+    <textarea name="text-input" id="text-input" cols="30" rows="10" placeholder="Paste Theme JSON..."></textarea>
+    <div>
+      <button id="create">Create</button>
+      <button id="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<style>
+
+</style>
+
+<script>
+
+const createButton = document.querySelector('#create');
+const cancelButton = document.querySelector('#cancel');
+
+createButton.onclick = () => {
+  const rawData = document.querySelector('textarea').value;
+
+  try {
+    const dataObj = JSON.parse(rawData);
+
+    parent.postMessage({ pluginMessage: { type: 'create-theme', dataObj} }, '*')
+  } catch (err) {
+    throw new Error('Message could not be sent to Figma Plugin');
+  }
+}
+
+cancelButton.onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+</script>
