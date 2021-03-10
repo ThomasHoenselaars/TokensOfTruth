@@ -1,5 +1,6 @@
 import { ITheme } from '../data/data';
 import { hexToRgb } from './hexToRgb'
+import { isEqual } from 'lodash-es';
 
 interface MappedValues {
   label: string;
@@ -35,9 +36,18 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
         styles.forEach((style) => {
 
           for (const colorToAdd of colorsToAdd) {
+            if (style.name === colorToAdd.name && !isEqual(style.paints[0].color, colorToAdd.color[0].color)) {
+              style.remove();
+
+              const newStyle = figma.createPaintStyle();
+
+              newStyle.name = colorToAdd.name;
+              newStyle.paints = colorToAdd.color;
+            }
             if (style.name === colorToAdd.name) {
-              const index = colorsToAdd.indexOf(colorToAdd, 0);
-              colorsToAdd.splice(index, 1);
+                const index = colorsToAdd.indexOf(colorToAdd, 0);
+                colorsToAdd.splice(index, 1);
+
             }
           }
         })
@@ -52,6 +62,7 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
     newStyle.paints = color.color;
   })
 
+  figma.closePlugin();
 }
 
 const mapValues = (colorObject: ITheme['colors']): MappedValues[] => (

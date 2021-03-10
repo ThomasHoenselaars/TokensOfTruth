@@ -32,7 +32,7 @@ export const theme: ITheme = {
     black: "#000000",
     white: "#ffffff",
     grey: {
-      '1': '#4B4B4B',
+      '1': '#033412',
       '2': '#D2D2D2',
       '3': '#7A7A7A',
       '4': '#4B4B4B',
