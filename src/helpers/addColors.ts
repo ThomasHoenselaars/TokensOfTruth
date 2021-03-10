@@ -36,6 +36,7 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
         styles.forEach((style) => {
 
           for (const colorToAdd of colorsToAdd) {
+            // @ts-ignore
             if (style.name === colorToAdd.name && !isEqual(style.paints[0].color, colorToAdd.color[0].color)) {
               style.remove();
 
@@ -44,6 +45,7 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
               newStyle.name = colorToAdd.name;
               newStyle.paints = colorToAdd.color;
             }
+            // @ts-check
             if (style.name === colorToAdd.name) {
                 const index = colorsToAdd.indexOf(colorToAdd, 0);
                 colorsToAdd.splice(index, 1);
@@ -69,11 +71,11 @@ const mapValues = (colorObject: ITheme['colors']): MappedValues[] => (
   Object.keys(colorObject).reduce((acc, current) => {
 
     const nested = Object.keys(colorObject[current]).map((colorHue: any) => (
-      typeof colorObject[current] === 'object' ? {
-        label: `${current}-${colorHue}`,
-        value: colorObject[current][colorHue],
-      } : null
-    ))
+        typeof colorObject[current] === 'object' ? {
+          label: `${current}-${colorHue}`,
+          value: (colorObject[current] as { [key: string]: string })[colorHue],
+        } : null
+      ))
 
     const topLevel = [
       ...acc,
