@@ -1,15 +1,22 @@
 import { ITheme } from '../data/data';
 import { hexToRgb } from './hexToRgb'
 import { isEqual } from 'lodash-es';
+import { mapFlattenObject } from '../helpers/mapFlattenObject';
 
 interface MappedValues {
   label: string;
   value: string;
 }
 
-export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) => {
-  const mappedValues = mapValues(colors);
-  const colorsToAdd: { name: string, color: Paint[]}[] = [];
+export const addColors = (data: ITheme, styles: Array<PaintStyle>) => {
+  const mappedValues = mapFlattenObject({
+    data,
+    needle: 'colors',
+    delimeter: '-',
+    transform: ([k, v]) => ({ label: k, value: v })
+  });
+
+  const colorsToAdd: Array<{ name: string | number, color: Paint[]}> = [];
 
   for (let i = 0; i < mappedValues.length; i++) {
     const styleValue = mappedValues[i].label;
@@ -45,7 +52,7 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
               newStyle.name = colorToAdd.name;
               newStyle.paints = colorToAdd.color;
             }
-            // @ts-check
+
             if (style.name === colorToAdd.name) {
                 const index = colorsToAdd.indexOf(colorToAdd, 0);
                 colorsToAdd.splice(index, 1);
@@ -60,31 +67,10 @@ export const addColors = (colors: ITheme['colors'], styles: Array<PaintStyle>) =
   colorsToAdd.forEach(color => {
     const newStyle = figma.createPaintStyle();
 
-    newStyle.name = color.name;
+    newStyle.name = String(color.name);
     newStyle.paints = color.color;
   })
 
   figma.closePlugin();
 }
 
-const mapValues = (colorObject: ITheme['colors']): MappedValues[] => (
-  Object.keys(colorObject).reduce((acc, current) => {
-
-    const nested = Object.keys(colorObject[current]).map((colorHue: any) => (
-        typeof colorObject[current] === 'object' ? {
-          label: `${current}-${colorHue}`,
-          value: (colorObject[current] as { [key: string]: string })[colorHue],
-        } : null
-      ))
-
-    const topLevel = [
-      ...acc,
-      typeof colorObject[current] === 'string' ? {
-        label: current,
-        value: colorObject[current]
-      } : null
-    ]
-
-    return topLevel.concat(nested).filter(x => x);
-  }, [] as any)
-)

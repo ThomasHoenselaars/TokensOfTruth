@@ -17,7 +17,7 @@ figma.ui.onmessage = async (msg: MessageEvent<ITheme>) => {
 
   switch (msg.type) {
     case AppMessages.CREATE_THEME:
-      addColors(msg.data.colors, styles);
+      addColors(msg.data, styles);
       figma.closePlugin();
       break;
 
